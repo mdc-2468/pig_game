@@ -68,6 +68,8 @@ main {
 }
 .player--active .name {
   font-weight: 700;
+  font-style: italic;
+  text-decoration: underline;
 }
 .player--active .score {
   font-weight: 400;
