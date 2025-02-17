@@ -105,7 +105,7 @@ function hold(player) {
     currentScore1UI.textContent = currentScore1;
   }
 
-  // Check > 100
+  // Check > 20
   setTimeout(() => {
     if (totalScore0 >= 20) alert("Player 1 wins");
     if (totalScore1 >= 20) alert("Player 2 wins");
@@ -113,7 +113,7 @@ function hold(player) {
 
 
   // Update Current Player
-  updateCurrentPlayer();
+  if (totalScore0 <= 20 && totalScore1 <= 20) updateCurrentPlayer();
 }
 
 function newGame() {
@@ -125,6 +125,7 @@ function newGame() {
   totalScore1 = 0;
   dice = 0;
 
+  diceImg.style.display = "None";
   document.querySelector('.player--0').classList.add("player--active");
   document.querySelector('.player--1').classList.remove("player--active");
   currentScore0UI.textContent = String(currentScore0);
@@ -138,6 +139,7 @@ function newGame() {
 // Fresh Start
 console.log("New Game Start...");
 console.log(`Let's start from: Player ${currentPlayer}`);
+diceImg.style.display = "None";
 
 // Start from 0
 totalScore0UI.textContent = totalScore0;
@@ -150,6 +152,7 @@ currentScore1UI.textContent = currentScore1;
 rollDiceBtn.addEventListener("click", function () {
   // console.log(`Player ${currentPlayer} is rolling a dice...`);
   let diceValue = rollDice();
+  diceImg.style.display = "Block";
   console.log(`Player ${currentPlayer} rolls a ${diceValue}`);
   addCurrent(diceValue, currentPlayer);
 });
