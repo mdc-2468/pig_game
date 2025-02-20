@@ -21,7 +21,6 @@ function rollDice() {
 
   console.log(`Player ${currentPlayer} rolls a ${dice}`);
   return dice;
-
 }
 
 function updateCurrentPlayer() {
@@ -35,29 +34,29 @@ function updateCurrentPlayer() {
 }
 
 
-function addCurrent(diceValue, player) {
+function addCurrent(diceValue) {
   if (diceValue !== 1) {
-    currentScores[player] += diceValue;
-    currentScoresUI[player].textContent = currentScores[player];
+    currentScores[currentPlayer] += diceValue;
+    currentScoresUI[currentPlayer].textContent = currentScores[currentPlayer];
 
   } else {
     console.log("Switch User because of dice = 1");
-    currentScores[player] = 0;
-    currentScoresUI[player].textContent = currentScores[player];
+    currentScores[currentPlayer] = 0;
+    currentScoresUI[currentPlayer].textContent = currentScores[currentPlayer];
 
     // Update Current Player
     updateCurrentPlayer();
   }
 }
 
-function hold(player) {
-  console.log(`Player ${player} clicked hold`);
+function hold() {
+  console.log(`Player ${currentPlayer} clicked hold`);
 
-  totalScores[player] += currentScores[player];
-  totalScoresUI[player].textContent = totalScores[player];
-  console.log(`Player ${player} has added ${currentScores[player]}, the total is now ${totalScores[player]}`);
-  currentScores[player] = 0;
-  currentScoresUI[player].textContent = currentScores[player];
+  totalScores[currentPlayer] += currentScores[currentPlayer];
+  totalScoresUI[currentPlayer].textContent = totalScores[currentPlayer];
+  console.log(`Player ${currentPlayer} has added ${currentScores[currentPlayer]}, the total is now ${totalScores[currentPlayer]}`);
+  currentScores[currentPlayer] = 0;
+  currentScoresUI[currentPlayer].textContent = currentScores[currentPlayer];
 
   // Check > 20
   setTimeout(() => {
@@ -66,7 +65,7 @@ function hold(player) {
   }, 200); // Delay by 200ms to allow UI updates
 
   // Update Current Player
-  if (totalScores[player] <= 20) updateCurrentPlayer();
+  if (totalScores[currentPlayer] <= 20) updateCurrentPlayer();
 }
 
 function newGame() {
@@ -99,11 +98,11 @@ for (let i = 0; i < 2; i++) {
 
 rollDiceBtn.addEventListener("click", function () {
   let diceValue = rollDice()
-  addCurrent(diceValue, currentPlayer);
+  addCurrent(diceValue);
 });
 
 holdBtn.addEventListener("click", function () {
-  hold(currentPlayer);
+  hold();
 });
 
 newGameBtn.addEventListener("click", newGame);
