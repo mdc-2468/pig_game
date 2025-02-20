@@ -61,6 +61,8 @@ function hold() {
 
   if (totalScores[currentPlayer] >= 30) {
     diceImg.style.display = "None";
+    holdBtn.style.display = "None";
+    rollDiceBtn.style.display = "None";
     setTimeout(() => {
       alert(`Player ${currentPlayer + 1} wins`);
     }, 200); // Delay by 200ms to allow UI updates
@@ -79,6 +81,8 @@ function newGame() {
   dice = 0;
 
   diceImg.style.display = "None";
+  holdBtn.style.display = "Block";
+  rollDiceBtn.style.display = "Block";
   document.querySelector('.player--0').classList.add("player--active");
   document.querySelector('.player--1').classList.remove("player--active");
 
