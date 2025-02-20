@@ -1,6 +1,6 @@
 # Introduction
 
-This is a game for two players, which the players aim at accumulating a total score of 20. The first player having total score with more than 20 will win the game.
+This is a game for two players, which the players aim at accumulating a total score of 30. The first player having total score with more than 20 will win the game.
 
 # Rules
 
