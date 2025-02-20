@@ -58,14 +58,17 @@ function hold() {
   currentScores[currentPlayer] = 0;
   currentScoresUI[currentPlayer].textContent = currentScores[currentPlayer];
 
-  // Check > 20
-  setTimeout(() => {
-    if (totalScores[0] >= 20) alert("Player 1 wins");
-    if (totalScores[1] >= 20) alert("Player 2 wins");
-  }, 200); // Delay by 200ms to allow UI updates
 
-  // Update Current Player
-  if (totalScores[currentPlayer] <= 20) updateCurrentPlayer();
+  if (totalScores[currentPlayer] >= 30) {
+    diceImg.style.display = "None";
+    setTimeout(() => {
+      alert(`Player ${currentPlayer + 1} wins`);
+    }, 200); // Delay by 200ms to allow UI updates
+
+  } else {
+    // Update Current Player
+    updateCurrentPlayer();
+  }
 }
 
 function newGame() {
