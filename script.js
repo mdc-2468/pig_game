@@ -1,10 +1,5 @@
 'use strict';
 
-let currentPlayer = 0;
-let currentScores = [0, 0];
-let totalScores = [0, 0];
-let dice = 0;
-
 const diceImg = document.querySelector(".dice")
 const rollDiceBtn = document.querySelector(".btn--roll");
 const holdBtn = document.querySelector(".btn--hold");
@@ -12,6 +7,7 @@ const newGameBtn = document.querySelector(".btn--new");
 const totalScoresUI = [document.querySelector("#score--0"), document.querySelector("#score--1")];
 const currentScoresUI = [document.querySelector("#current--0"), document.querySelector("#current--1")];
 
+let currentPlayer, currentScores, totalScores, dice;
 
 function rollDice() {
   dice = Math.floor(Math.random() * 6 + 1);
@@ -32,7 +28,6 @@ function updateCurrentPlayer() {
   console.log(`Now it's player ${currentPlayer}'s turn`);
 
 }
-
 
 function addCurrent(diceValue) {
   if (diceValue !== 1) {
@@ -58,7 +53,6 @@ function hold() {
   currentScores[currentPlayer] = 0;
   currentScoresUI[currentPlayer].textContent = currentScores[currentPlayer];
 
-
   if (totalScores[currentPlayer] >= 30) {
     diceImg.style.display = "None";
     holdBtn.style.display = "None";
@@ -75,6 +69,8 @@ function hold() {
 
 function newGame() {
   console.log("Staring new game...");
+  console.log(`Let's start from: Player ${currentPlayer}`);
+
   currentPlayer = 0;
   currentScores = [0, 0];
   totalScores = [0, 0];
@@ -93,15 +89,7 @@ function newGame() {
 }
 
 // Fresh Start
-console.log("New Game Start...");
-console.log(`Let's start from: Player ${currentPlayer}`);
-diceImg.style.display = "None";
-
-// Start from 0
-for (let i = 0; i < 2; i++) {
-  currentScoresUI[i].textContent = currentScores[i];
-  totalScoresUI[i].textContent = totalScores[i];
-}
+newGame();
 
 rollDiceBtn.addEventListener("click", function () {
   let diceValue = rollDice()
