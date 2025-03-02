@@ -1,103 +1,89 @@
 'use strict';
 
-const diceImg = document.querySelector(".dice")
-const rollDiceBtn = document.querySelector(".btn--roll");
-const holdBtn = document.querySelector(".btn--hold");
-const newGameBtn = document.querySelector(".btn--new");
-const totalScoresUI = [document.querySelector("#score--0"), document.querySelector("#score--1")];
-const currentScoresUI = [document.querySelector("#current--0"), document.querySelector("#current--1")];
+let activePlayer = 0;
+let counterPlayer = 1;
+let currentScores = [0, 0];
+let totalScores = [0, 0];
 
-let currentPlayer, currentScores, totalScores, dice;
+const diceUI = document.querySelector("#diceUI");
+const diceImg = document.querySelector("#diceImg");
+const whoseTurnUI = document.querySelector("#whoseTurnUI");
+const whoseTurn = document.querySelector("#whoseTurn");
+const playerCards = [document.querySelector("#player0"), document.querySelector("#player1")];
+const rollBtns = [document.querySelector("#roll0"), document.querySelector("#roll1")]
+const holdBtns = [document.querySelector("#hold0"), document.querySelector("#hold1")]
+const currentUI = [document.querySelector("#current0"), document.querySelector("#current1")]
+const totalUI = [document.querySelector("#total0"), document.querySelector("#total1")]
 
-function rollDice() {
-  dice = Math.floor(Math.random() * 6 + 1);
 
-  diceImg.src = `dice-${dice}.png`;
-  diceImg.style.display = "Block";
+document.querySelector("#newGame").addEventListener("click", triggerNewGame);
 
-  console.log(`Player ${currentPlayer} rolls a ${dice}`);
-  return dice;
+for (let i = 0; i < rollBtns.length; i++) {
+  rollBtns[i].addEventListener("click", () => { rollDice(activePlayer) });
+}
+for (let i = 0; i < holdBtns.length; i++) {
+  holdBtns[i].addEventListener("click", () => { hold(activePlayer, currentScores[activePlayer]) });
 }
 
-function updateCurrentPlayer() {
-  currentPlayer = 1 - currentPlayer;
-
-  document.querySelector('.player--0').classList.toggle("player--active");
-  document.querySelector('.player--1').classList.toggle("player--active");
-
-  console.log(`Now it's player ${currentPlayer}'s turn`);
-
-}
-
-function addCurrent(diceValue) {
-  if (diceValue !== 1) {
-    currentScores[currentPlayer] += diceValue;
-    currentScoresUI[currentPlayer].textContent = currentScores[currentPlayer];
-
-  } else {
-    console.log("Switch User because of dice = 1");
-    currentScores[currentPlayer] = 0;
-    currentScoresUI[currentPlayer].textContent = currentScores[currentPlayer];
-
-    // Update Current Player
-    updateCurrentPlayer();
-  }
-}
-
-function hold() {
-  console.log(`Player ${currentPlayer} clicked hold`);
-
-  totalScores[currentPlayer] += currentScores[currentPlayer];
-  totalScoresUI[currentPlayer].textContent = totalScores[currentPlayer];
-  console.log(`Player ${currentPlayer} has added ${currentScores[currentPlayer]}, the total is now ${totalScores[currentPlayer]}`);
-  currentScores[currentPlayer] = 0;
-  currentScoresUI[currentPlayer].textContent = currentScores[currentPlayer];
-
-  if (totalScores[currentPlayer] >= 30) {
-    diceImg.style.display = "None";
-    holdBtn.style.display = "None";
-    rollDiceBtn.style.display = "None";
-    setTimeout(() => {
-      alert(`Player ${currentPlayer + 1} wins`);
-    }, 200); // Delay by 200ms to allow UI updates
-
-  } else {
-    // Update Current Player
-    updateCurrentPlayer();
-  }
-}
-
-function newGame() {
-  console.log("Staring new game...");
-  console.log(`Let's start from: Player ${currentPlayer}`);
-
-  currentPlayer = 0;
+function triggerNewGame() {
+  console.log('Activating New Game...');
+  activePlayer = 0;
+  rollBtns[counterPlayer].disabled = true;
+  holdBtns[counterPlayer].disabled = true;
+  rollBtns[activePlayer].disabled = false;
+  holdBtns[activePlayer].disabled = false;
   currentScores = [0, 0];
   totalScores = [0, 0];
-  dice = 0;
-
-  diceImg.style.display = "None";
-  holdBtn.style.display = "Block";
-  rollDiceBtn.style.display = "Block";
-  document.querySelector('.player--0').classList.add("player--active");
-  document.querySelector('.player--1').classList.remove("player--active");
-
   for (let i = 0; i < 2; i++) {
-    currentScoresUI[i].textContent = currentScores[i];
-    totalScoresUI[i].textContent = totalScores[i];
+    currentUI[i].innerText = currentScores[i];
+    totalUI[i].innerText = totalScores[i];
   }
+  diceUI.classList.remove("hidden");
+  whoseTurnUI.classList.remove("hidden");
+  playerCards[0].classList.add("activePlayer");
 }
 
-// Fresh Start
-newGame();
+function rollDice(activePlayer) {
+  const diceValue = Math.floor(Math.random() * 6 + 1);
+  console.log(`Player ${activePlayer} roll a dice of ${diceValue}`);
+  const diceImgSrc = 'dice-' + diceValue + '.png';
+  diceImg.src = diceImgSrc;
+  updateCurrent(activePlayer, diceValue);
+}
 
-rollDiceBtn.addEventListener("click", function () {
-  let diceValue = rollDice()
-  addCurrent(diceValue);
-});
+function updateCurrent(activePlayer, diceValue) {
+  if (diceValue === 1) {
+    currentScores[activePlayer] = 0;
+    currentUI[activePlayer].innerText = currentScores[activePlayer];
+    switchPlayer();
+  } else {
+    currentScores[activePlayer] += diceValue;
+    currentUI[activePlayer].innerText = currentScores[activePlayer];
+  }
+  console.log(`Updating Current Score of player ${activePlayer} to ${currentScores[activePlayer]}`);
+  console.log(`Current Scores: ${currentScores}; Total Scores: ${totalScores}; Active Player: ${activePlayer}`);
+}
 
-holdBtn.addEventListener("click", function () {
-  hold();
-});
+function hold(activePlayer, currentScore) {
+  console.log(`Player ${activePlayer} clicked hold, and is adding ${currentScore} to total.`);
+  totalScores[activePlayer] += currentScores[activePlayer];
+  totalUI[activePlayer].innerText = totalScores[activePlayer];
+  currentScores[activePlayer] = 0;
+  currentUI[activePlayer].innerText = currentScores[activePlayer];
+  switchPlayer();
 
-newGameBtn.addEventListener("click", newGame);
+}
+
+function switchPlayer() {
+  console.log('Switching Player...');
+  playerCards[0].classList.toggle("activePlayer");
+  playerCards[1].classList.toggle("activePlayer");
+  activePlayer = 1 - activePlayer;
+  counterPlayer = 1 - counterPlayer;
+  rollBtns[counterPlayer].disabled = true;
+  holdBtns[counterPlayer].disabled = true;
+  rollBtns[activePlayer].disabled = false;
+  holdBtns[activePlayer].disabled = false;
+  whoseTurn.innerText = `Player ${activePlayer + 1}'s turn`;
+  console.log(`Current Scores: ${currentScores}; Total Scores: ${totalScores}; Active Player: ${activePlayer}`);
+}
