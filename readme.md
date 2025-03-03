@@ -23,7 +23,4 @@ If a player feels the next round is going to be '1', they can click "HOLD", whic
 - Added "Hold" button handling to add current score to total score and switch active player;
 - Added handling to switch user if user roll a dice of 1
 - Added handling to update whose turn statement when switching player
-
-# To Do
-
 - Add the logic to win the game

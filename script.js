@@ -9,6 +9,8 @@ const diceUI = document.querySelector("#diceUI");
 const diceImg = document.querySelector("#diceImg");
 const whoseTurnUI = document.querySelector("#whoseTurnUI");
 const whoseTurn = document.querySelector("#whoseTurn");
+const winnerUI = document.querySelector("#winnerUI");
+const winnerStmt = document.querySelector("#winnerStatement");
 const playerCards = [document.querySelector("#player0"), document.querySelector("#player1")];
 const rollBtns = [document.querySelector("#roll0"), document.querySelector("#roll1")]
 const holdBtns = [document.querySelector("#hold0"), document.querySelector("#hold1")]
@@ -40,6 +42,7 @@ function triggerNewGame() {
   }
   diceUI.classList.remove("hidden");
   whoseTurnUI.classList.remove("hidden");
+  winnerUI.classList.remove("hidden");
   playerCards[0].classList.add("activePlayer");
 }
 
@@ -68,6 +71,18 @@ function hold(activePlayer, currentScore) {
   console.log(`Player ${activePlayer} clicked hold, and is adding ${currentScore} to total.`);
   totalScores[activePlayer] += currentScores[activePlayer];
   totalUI[activePlayer].innerText = totalScores[activePlayer];
+  if (totalScores[activePlayer] >= 30) {
+    let winner = activePlayer;
+    diceUI.classList.add('hidden');
+    whoseTurnUI.classList.add("hidden");
+    winnerUI.classList.remove("hidden");
+    winnerStmt.innerText = `Player ${winner + 1} wins!!`;
+    for (let i = 0; i < 2; i++) {
+      playerCards[i].classList.remove("activePlayer");
+    }
+    return;
+
+  }
   currentScores[activePlayer] = 0;
   currentUI[activePlayer].innerText = currentScores[activePlayer];
   switchPlayer();
